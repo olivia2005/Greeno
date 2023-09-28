@@ -4,6 +4,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 
 public class BrowserFactory {
 
@@ -23,7 +24,9 @@ public class BrowserFactory {
                     break;
                 case "firefox":
                     WebDriverManager.firefoxdriver().setup();
-                    driver = new FirefoxDriver();
+                    FirefoxOptions options = new FirefoxOptions();
+                    options.addArguments("-private");
+                    driver = new FirefoxDriver(options);
                     break;
                 // You can add more browsers here if needed
                 default:
@@ -38,5 +41,10 @@ public class BrowserFactory {
             driver.quit();
             driver = null; // Set to null so a new instance can be created on the next call
         }
+    }
+
+    // The new method startBrowser to initialize the driver
+    public static WebDriver startBrowser() {
+        return getDriver();
     }
 }
