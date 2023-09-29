@@ -1,26 +1,23 @@
 package tests;
 
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.HomePage;
-import utils.BrowserFactory;
+import utils.BaseTest;
 import utils.JsonDataReader;
 
 import java.util.Iterator;
 
-public class SearchFunctionalityTest {
+public class SearchFunctionalityTest extends BaseTest {
 
-    private WebDriver driver;
     private HomePage homePage;
 
     @BeforeMethod
     public void setup() {
-        driver = BrowserFactory.getDriver();
-        homePage = new HomePage(driver);
+        // Navigate to the homepage of the website
         driver.get("https://greeno.ro/ro/");
+        homePage = new HomePage(driver);
     }
 
     @DataProvider(name = "searchTerms")
@@ -35,10 +32,5 @@ public class SearchFunctionalityTest {
         homePage.searchFor(searchTerm);
         // TODO: Assert or validate the results if necessary.
         // For instance, you might want to check if the results page has results.
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        BrowserFactory.quitDriver();
     }
 }

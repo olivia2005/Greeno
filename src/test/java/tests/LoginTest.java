@@ -1,29 +1,23 @@
 package tests;
 
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.LoginPage;
-import utils.BrowserFactory;
+import utils.BaseTest;
 import utils.DatabaseUtils;
 
-public class LoginTest {
+public class LoginTest extends BaseTest {
 
-    private WebDriver driver;
     private LoginPage loginPage;
 
     @BeforeMethod
-    public void setup() {
-        driver = BrowserFactory.startBrowser();
-        driver.manage().window().maximize();
-        loginPage = new LoginPage(driver);
+    public void setupTest() {
+        driver.get("https://greeno.ro/ro/autentificare?back=my-account");
+        loginPage = new LoginPage(driver);  // This line ensures that the driver is initialized before using it
     }
 
     @Test
     public void loginUserFromDatabase() throws InterruptedException {
-        driver.get("https://greeno.ro/ro/autentificare?back=my-account");
-
         // Fetch login credentials from the database
         String[] credentials = DatabaseUtils.getLoginCredentials();
 
@@ -43,10 +37,5 @@ public class LoginTest {
 
         // Pause for 5 seconds for visibility
         Thread.sleep(5000);
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
     }
 }

@@ -2,20 +2,16 @@ package tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import utils.BrowserFactory;
+import utils.BaseTest;
 
 import java.time.Duration;
 
-public class SearchAndClickFirstResultTest {
-
-    private WebDriver driver;
+public class SearchAndClickFirstResultTest extends BaseTest {
 
     // Web elements
     private By searchInput = By.name("s");
@@ -24,13 +20,12 @@ public class SearchAndClickFirstResultTest {
 
     @BeforeMethod
     public void setup() {
-        driver = BrowserFactory.startBrowser();
-        driver.manage().window().maximize(); // Optionally maximize the window, like in your previous test
+        // Navigate to the homepage of the website
+        driver.get("https://greeno.ro");
     }
 
     @Test
     public void searchMinoxidilAndClickFirstResult() {
-        driver.get("https://greeno.ro");
 
         // Input the search term and click the search button.
         driver.findElement(searchInput).sendKeys("minoxidil");
@@ -44,11 +39,5 @@ public class SearchAndClickFirstResultTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
 
         // Add any assertions or further actions as needed
-    }
-
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
     }
 }

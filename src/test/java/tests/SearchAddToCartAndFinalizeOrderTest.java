@@ -2,20 +2,16 @@ package tests;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import utils.BrowserFactory;
+import utils.BaseTest;
 
 import java.time.Duration;
 
-public class SearchAddToCartAndFinalizeOrderTest {
-
-    private WebDriver driver;
+public class SearchAddToCartAndFinalizeOrderTest extends BaseTest {
 
     // Web elements
     private By searchInput = By.name("s");
@@ -26,13 +22,12 @@ public class SearchAddToCartAndFinalizeOrderTest {
 
     @BeforeMethod
     public void setup() {
-        driver = BrowserFactory.startBrowser();
-        driver.manage().window().maximize();
+        // Navigate to the homepage of the website
+        driver.get("https://greeno.ro");
     }
 
     @Test
     public void searchMinoxidilAddToCartAndFinalizeOrder() throws InterruptedException {
-        driver.get("https://greeno.ro");
 
         // Input the search term and click the search button.
         driver.findElement(searchInput).sendKeys("minoxidil");
@@ -47,7 +42,7 @@ public class SearchAddToCartAndFinalizeOrderTest {
 
         // Wait for the add to cart button and click it
         WebElement addToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(addToCartButton));
-        addToCart.click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCart);
 
         // Introducing a 5-second wait after adding to cart
         Thread.sleep(5000);  // 5 seconds in milliseconds
@@ -60,10 +55,5 @@ public class SearchAddToCartAndFinalizeOrderTest {
         Thread.sleep(5000);  // 5 seconds in milliseconds
 
         // Add any assertions or further actions as needed
-    }
-
-    @AfterMethod
-    public void tearDown() {
-        driver.quit();
     }
 }

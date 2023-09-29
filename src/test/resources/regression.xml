@@ -1,4 +1,6 @@
 <suite name="Regression Test Suite">
+    <parameter name="browser" value="firefox"/> <!-- default browser is set to firefox -->
+
     <test name="Regression Tests">
         <classes>
             <class name="tests.AddToCartTest" />

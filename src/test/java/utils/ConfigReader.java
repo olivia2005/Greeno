@@ -34,6 +34,10 @@ public class ConfigReader {
         return properties.getProperty(key);
     }
 
+    public static void setBrowserPropertyValue(String value) {
+        properties.setProperty("browser", value);
+    }
+
     public static Connection getDatabaseConnection() {
         return connection;
     }

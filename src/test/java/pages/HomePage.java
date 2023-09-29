@@ -54,7 +54,7 @@ public class HomePage {
         }
 
         wait.until(ExpectedConditions.visibilityOf(element));
-        element.click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
 
         return new ProductDetailsPage(driver);
     }
