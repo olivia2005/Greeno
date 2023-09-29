@@ -6,14 +6,8 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.BeforeSuite;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.*;
 import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
 
 public class BaseTest {
     protected WebDriver driver;  // Adding WebDriver instance
@@ -50,15 +44,13 @@ public class BaseTest {
         } else {
             test.log(Status.PASS, "Test passed");
         }
-
-        if (driver != null) {
-            driver.quit();
-        }
     }
 
     @AfterTest  // Executed after each <test> tag in your XML
     public void tearDownBrowser() {
-        // No driver quit here, since we are quitting it in the @AfterMethod
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
     @AfterSuite
