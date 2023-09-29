@@ -21,7 +21,7 @@ public class DeleteFromCartTest {
     private By searchInput = By.name("s");
     private By searchButton = By.cssSelector(".search-btn");
     private By firstProductImage = By.cssSelector("img[alt='Spuma 9 Luni, Kirkland,...']");
-    private By addToCartButton = By.cssSelector("button.btn-primary:nth-child(1)");
+    private By addToCartButton = By.cssSelector("#add-to-cart-or-refresh > div.product-add-to-cart.pt-3 > div > div.col.col-12.col-sm-auto.col-add-btn > div > button");
     private By continueShoppingButton = By.cssSelector("button.btn-secondary:nth-child(2)");
     private By cartButton = By.cssSelector("#cart-toogle > i:nth-child(1)");
     private By trashCanIcon = By.cssSelector(".fa-trash-o");
@@ -49,7 +49,7 @@ public class DeleteFromCartTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
 
         // Wait for the add to cart button and click it
-        WebElement addToCart = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+        WebElement addToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(addToCartButton));
         addToCart.click();
 
         // Introducing a 5-second wait after adding to cart

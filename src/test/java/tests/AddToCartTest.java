@@ -21,7 +21,7 @@ public class AddToCartTest {
     private By searchInput = By.name("s");
     private By searchButton = By.cssSelector(".search-btn");
     private By firstProductImage = By.cssSelector("img[alt='Spuma 9 Luni, Kirkland,...']");
-    private By addToCartButton = By.cssSelector("button.btn-primary.btn-lg.add-to-cart");
+    private By addToCartButton = By.cssSelector("#add-to-cart-or-refresh > div.product-add-to-cart.pt-3 > div > div.col.col-12.col-sm-auto.col-add-btn > div > button");
 
     @BeforeMethod
     public void setup() {
@@ -44,9 +44,10 @@ public class AddToCartTest {
         // Use JavaScript to click on the first result
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
 
-        // Wait for the "Add to Cart" button to appear and click it.
-        WebElement addToCart = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
-        addToCart.click();
+        // Wait for the "Add to Cart" button to appear and click it using JavaScript.
+        WebElement addToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(addToCartButton));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCart);
+
         // Introducing a 10-second wait after adding to cart
         try {
             Thread.sleep(5000);  // 10 seconds in milliseconds
@@ -56,6 +57,7 @@ public class AddToCartTest {
 
         // You can also add assertions here to check if the item was successfully added to the cart.
     }
+
 
     @AfterMethod
     public void tearDown() {

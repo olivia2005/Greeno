@@ -46,7 +46,7 @@ public class SearchAddToCartAndContinueShoppingTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
 
         // Wait for the add to cart button and click it
-        WebElement addToCart = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+        WebElement addToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(addToCartButton));
         addToCart.click();
 
         // Introducing a 5-second wait after adding to cart

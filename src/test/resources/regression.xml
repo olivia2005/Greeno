@@ -1,0 +1,16 @@
+<suite name="Regression Test Suite">
+    <test name="Regression Tests">
+        <classes>
+            <class name="tests.AddToCartTest" />
+            <class name="tests.DeleteFromCartTest" />
+            <class name="tests.LoginTest" />
+            <class name="tests.ProductNavigationTests" />
+            <class name="tests.SearchAddToCartAndContinueShoppingTest" />
+            <class name="tests.SearchAddToCartAndFinalizeOrderTest" />
+            <class name="tests.SearchAndClickFirstResultTest" />
+            <class name="tests.SearchFunctionalityTest" />
+            <class name="tests.WishlistTest" />
+            <!-- Include other test classes if they have regression tests -->
+        </classes>
+    </test>
+</suite>
