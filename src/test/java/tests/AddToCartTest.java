@@ -17,7 +17,7 @@ public class AddToCartTest extends BaseTest {
     private By searchInput = By.name("s");
     private By searchButton = By.cssSelector(".search-btn");
     private By firstProductImage = By.cssSelector("img[alt='Spuma 9 Luni, Kirkland,...']");
-    private By addToCartButton = By.cssSelector("#add-to-cart-or-refresh > div.product-add-to-cart.pt-3 > div > div.col.col-12.col-sm-auto.col-add-btn > div > button");
+    private By addToCartButton = By.xpath("//div[@class='add']/button[contains(@class,'add-to-cart')]");
 
     @BeforeMethod
     public void setupTest() {
@@ -38,8 +38,9 @@ public class AddToCartTest extends BaseTest {
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
 
         // Wait for the "Add to Cart" button to appear and click it using JavaScript.
-        WebElement addToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(addToCartButton));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCart);
+        WebElement addToCart = wait.until(ExpectedConditions.elementToBeClickable(addToCartButton));
+      /*  ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCart);*/
+        addToCart.click();
 
         // Introducing a 5-second wait after adding to cart
         try {

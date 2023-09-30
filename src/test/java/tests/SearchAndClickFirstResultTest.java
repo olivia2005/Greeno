@@ -32,12 +32,17 @@ public class SearchAndClickFirstResultTest extends BaseTest {
         driver.findElement(searchButton).click();
 
         // Wait for the search results to appear
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        WebElement firstResult = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProductImage));
+        openProductPage("Solutie 3 Luni, Equate, Minoxidil");
+        System.out.println("done!");
 
-        // Use JavaScript to click on the element
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
 
         // Add any assertions or further actions as needed
+    }
+    private void openProductPage(String productName){
+        String productXpath="//h3[@class='h3 product-title']/a[contains(text(),'"+productName+"')]";
+        WebElement product=driver.findElement(By.xpath(productXpath));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+       wait.until(ExpectedConditions.elementToBeClickable(product));
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", product);
     }
 }

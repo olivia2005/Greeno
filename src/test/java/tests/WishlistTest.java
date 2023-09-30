@@ -53,8 +53,9 @@ public class WishlistTest extends BaseTest {
         Thread.sleep(5000);  // 5 seconds wait
 
         // Wait for the 'Add to Wishlist' button to be present and use JavaScript to click on it
-        WebElement addToWishlistButton = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#iqit-wishlist-product-btn")));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToWishlistButton);
+        WebElement addToWishlistButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class,'btn-iqitwishlist-add')]")));
+     /*   ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToWishlistButton);*/
+        addToWishlistButton.click();
         Thread.sleep(5000);  // 5 seconds wait
 
         // Navigate to wishlist

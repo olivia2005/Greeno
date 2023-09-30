@@ -23,16 +23,26 @@ public class BaseTest {
 
     @BeforeTest  // Executed before each <test> tag in your XML
     @Parameters("browser")
-    public void setupBrowser(@Optional("firefox") String browser) {
+    public void setupTest(@Optional("firefox") String browser) {
+        if (driver == null) {
+            setupBrowser(browser);
+        }
+    }
+
+
+    public void setupBrowser(String browser) {
         ConfigReader.setBrowserPropertyValue(browser);
         driver = BrowserFactory.startBrowser();
         driver.manage().window().maximize();
     }
 
     @BeforeMethod
-    @Parameters({"testName", "testDescription"})
-    public void beforeMethod(@Optional("DefaultTestName") String testName, @Optional("DefaultTestDescription") String testDescription) {
+    @Parameters({"testName", "testDescription", "browser"})
+    public void beforeMethod(@Optional("DefaultTestName") String testName, @Optional("DefaultTestDescription") String testDescription, @Optional("firefox") String browser) {
         test = extent.createTest(testName, testDescription);
+        if (driver == null) {
+            setupBrowser(browser);
+        }
     }
 
     @AfterMethod
