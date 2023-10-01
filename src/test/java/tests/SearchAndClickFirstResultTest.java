@@ -7,32 +7,41 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pages.HomePage;
+import pages.LoginPage;
+import pages.ProductDetailsPage;
 import utils.BaseTest;
 
 import java.time.Duration;
 
 public class SearchAndClickFirstResultTest extends BaseTest {
-
-    // Web elements
-    private By searchInput = By.name("s");
-    private By searchButton = By.cssSelector(".search-btn");
-    private By firstProductImage = By.cssSelector("img[alt='Spuma 9 Luni, Kirkland,...']");
+    private HomePage homePage;
+    private ProductDetailsPage productDetailsPage;  // Declare ProductDetailsPage object
+    private LoginPage loginPage;  // Declare LoginPage object
 
     @BeforeMethod
     public void setup() {
         // Navigate to the homepage of the website
         driver.get("https://greeno.ro");
+        homePage = new HomePage(driver);
+        productDetailsPage = new ProductDetailsPage(driver);  // Initialize ProductDetailsPage object
+        loginPage = new LoginPage(driver);  // Initialize LoginPage object
     }
 
     @Test
     public void searchMinoxidilAndClickFirstResult() {
 
         // Input the search term and click the search button.
-        driver.findElement(searchInput).sendKeys("minoxidil");
-        driver.findElement(searchButton).click();
+        homePage.searchFor("minoxidil");
+        homePage.clickSearchButton();
+
+        // Click on the #hide_promo if present
+        loginPage.clickHidePromoIfExists();
+        acceptCookies();
 
         // Wait for the search results to appear
         openProductPage("Solutie 3 Luni, Equate, Minoxidil");
+
         System.out.println("done!");
 
 

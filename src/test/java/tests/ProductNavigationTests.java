@@ -11,13 +11,13 @@ import pages.HomePage;
 import pages.ProductDetailsPage;
 import utils.BaseTest;
 import org.openqa.selenium.TimeoutException;
-
+import pages.LoginPage;
 import java.time.Duration;
 
 public class ProductNavigationTests extends BaseTest {
 
     HomePage homePage;
-
+    private LoginPage loginPage;  // Declare LoginPage object
     @BeforeMethod
     public void setup() {
         // Navigate to the homepage of the website
@@ -25,17 +25,10 @@ public class ProductNavigationTests extends BaseTest {
 
         // Initializing HomePage
         homePage = new HomePage(driver);
+        loginPage = new LoginPage(driver);  // Initialize LoginPage object
 
-        // Wait for the cookie banner and accept it if it appears
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        try {
-            WebElement acceptCookiesButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("iqitcookielaw-accept")));
-            acceptCookiesButton.click();
-        } catch (TimeoutException e) {
-            // Cookie banner did not appear within 10 seconds, so continue with the test
-        }
-
+        loginPage.clickHidePromoIfExists();
+        acceptCookies();
         try {
             WebElement promoCloseButton = new WebDriverWait(driver, Duration.ofSeconds(10))
                     .until(ExpectedConditions.visibilityOfElementLocated(By.id("hide_promo")));

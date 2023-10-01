@@ -4,10 +4,16 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 import org.testng.annotations.Optional;
+
+import java.time.Duration;
 
 public class BaseTest {
     protected WebDriver driver;  // Adding WebDriver instance
@@ -55,7 +61,16 @@ public class BaseTest {
             test.log(Status.PASS, "Test passed");
         }
     }
-
+    // A method to accept the cookies banner if it is present
+    protected void acceptCookies() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        try {
+            WebElement acceptCookiesButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("iqitcookielaw-accept")));
+            acceptCookiesButton.click();
+        } catch (Exception e) {
+            // Cookie banner did not appear, so continue with the test
+        }
+    }
     @AfterTest  // Executed after each <test> tag in your XML
     public void tearDownBrowser() {
         if (driver != null) {

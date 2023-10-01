@@ -7,72 +7,80 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import pages.LoginPage;
+import pages.ProductDetailsPage;
 import utils.BaseTest;
-
+import pages.HomePage;  // Import the HomePage class
 import java.time.Duration;
-
+import pages.ShoppingCartPage;
 public class DeleteFromCartTest extends BaseTest {
-
+    private HomePage homePage;
+    private ProductDetailsPage productDetailsPage;  // Declare ProductDetailsPage object
+    private LoginPage loginPage;  // Declare LoginPage object
+    private ShoppingCartPage shoppingCartPage;  // Declare ShoppingCartPage object
     // Web elements
-    private By searchInput = By.name("s");
-    private By searchButton = By.cssSelector(".search-btn");
-    private By firstProductImage = By.cssSelector("img[alt='Spuma 9 Luni, Kirkland,...']");
-    private By addToCartButton = By.cssSelector("#add-to-cart-or-refresh > div.product-add-to-cart.pt-3 > div > div.col.col-12.col-sm-auto.col-add-btn > div > button");
-    private By continueShoppingButton = By.cssSelector("button.btn-secondary:nth-child(2)");
-    private By cartButton = By.cssSelector("#cart-toogle > i:nth-child(1)");
-    private By trashCanIcon = By.cssSelector(".fa-trash-o");
-    private By closeShoppingCart = By.cssSelector("#js-cart-close");
 
     @BeforeMethod
     public void setupTest() {
         driver.get("https://greeno.ro");
+        homePage = new HomePage(driver);
+        productDetailsPage = new ProductDetailsPage(driver);  // Initialize ProductDetailsPage object
+        loginPage = new LoginPage(driver);  // Initialize LoginPage object
+        shoppingCartPage = new ShoppingCartPage(driver);  // Initialize ShoppingCartPage object
     }
 
     @Test
     public void searchMinoxidilAddToCartDeleteAndCloseCart() throws InterruptedException {
         // Input the search term and click the search button.
-        driver.findElement(searchInput).sendKeys("minoxidil");
-        driver.findElement(searchButton).click();
+        homePage.searchFor("minoxidil");
+        homePage.clickSearchButton();
+        // Click on the #hide_promo if present
+        loginPage.clickHidePromoIfExists();
+        acceptCookies();
 
         // Wait for the search results to appear
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        WebElement firstResult = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProductImage));
+        // Using methods from ProductDetailsPage to interact with the page
+        productDetailsPage.clickSecondProduct();  // Clicks the second product
 
-        // Use JavaScript to click on the element
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
-
-        // Wait for the add to cart button
-        WebElement addToCart = wait.until(ExpectedConditions.visibilityOfElementLocated(addToCartButton));
-        // Use JavaScript to click on the add to cart button
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToCart);
+        // Introducing a 5-second wait after clicking the second product
+        try {
+            Thread.sleep(5000);  // 5 seconds in milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // Click on the #hide_promo if present
+        loginPage.clickHidePromoIfExists();
+        // Use method from ProductDetailsPage to click the Add to Cart button
+        productDetailsPage.clickAddToCart();
 
         // Introducing a 5-second wait after adding to cart
-        Thread.sleep(5000);  // 5 seconds in milliseconds
+        try {
+            Thread.sleep(5000);  // 5 seconds in milliseconds
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
         // Wait for the continue shopping button and click it
-        WebElement continueShopping = wait.until(ExpectedConditions.elementToBeClickable(continueShoppingButton));
-        continueShopping.click();
+        shoppingCartPage.clickContinueShopping(wait);
 
         // Introducing a 5-second wait after continuing shopping
         Thread.sleep(5000);  // 5 seconds in milliseconds
 
         // Click on the shopping cart button
-        WebElement cartBtn = wait.until(ExpectedConditions.elementToBeClickable(cartButton));
-        cartBtn.click();
-
+        shoppingCartPage.clickCartButton(wait);
         // Wait for 5 seconds
         Thread.sleep(5000);
 
         // Click on the trashcan icon to delete the product
-        WebElement trashCan = wait.until(ExpectedConditions.elementToBeClickable(trashCanIcon));
-        trashCan.click();
+        shoppingCartPage.clickTrashCanIcon(wait);
 
         // Wait for 5 seconds
         Thread.sleep(5000);
 
         // Click on the 'x' to close the shopping cart
-        WebElement closeCartBtn = wait.until(ExpectedConditions.elementToBeClickable(closeShoppingCart));
-        closeCartBtn.click();
+        shoppingCartPage.clickCloseShoppingCart(wait);
 
         // Wait for another 5 seconds for presentation purposes
         Thread.sleep(5000);

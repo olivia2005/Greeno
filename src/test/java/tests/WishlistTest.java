@@ -9,6 +9,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LoginPage;
+import pages.ProductDetailsPage;
+import pages.WishListPage;
 import utils.BaseTest;
 import utils.DatabaseUtils;
 
@@ -18,12 +20,15 @@ public class WishlistTest extends BaseTest {
 
     private LoginPage loginPage;
     private HomePage homePage;
-    private By firstProductImage = By.cssSelector("img[alt='Spuma 9 Luni, Kirkland,...']");
+    private ProductDetailsPage productDetailsPage;  // Declare ProductDetailsPage object
+    private WishListPage wishListPage; // Declare WishListPage object
 
     @BeforeMethod
     public void setupPages() {
         loginPage = new LoginPage(driver);
         homePage = new HomePage(driver);
+        productDetailsPage = new ProductDetailsPage(driver);  // Initialize ProductDetailsPage object
+        wishListPage = new WishListPage(driver); // Initialize WishListPage object
     }
 
     @Test
@@ -44,26 +49,30 @@ public class WishlistTest extends BaseTest {
         // Search for the term and click on the first result
         homePage.searchFor("minoxidil");
 
+        // Click on the #hide_promo if present
+        loginPage.clickHidePromoIfExists();
+        acceptCookies();
+
         // Wait for the search results to appear
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-        WebElement firstResult = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProductImage));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", firstResult);
+
+        // Using methods from ProductDetailsPage to interact with the page
+        productDetailsPage.clickSecondProduct();  // Clicks the second product
 
         loginPage.clickHidePromoIfExists();
         Thread.sleep(5000);  // 5 seconds wait
+        acceptCookies();
 
-        // Wait for the 'Add to Wishlist' button to be present and use JavaScript to click on it
-        WebElement addToWishlistButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class,'btn-iqitwishlist-add')]")));
-     /*   ((JavascriptExecutor) driver).executeScript("arguments[0].click();", addToWishlistButton);*/
-        addToWishlistButton.click();
+        // Wait for the 'Add to Wishlist' button to be present and click on it
+        productDetailsPage.clickAddToWishlist();
         Thread.sleep(5000);  // 5 seconds wait
 
         // Navigate to wishlist
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("div.d-inline-block:nth-child(3) > a:nth-child(1)"))).click();
+        wishListPage.clickNavigateToWishlist(wait);
         Thread.sleep(5000);  // 5 seconds wait
 
         // Remove the product from the wishlist
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".fa-trash-o"))).click();
+        wishListPage.clickRemoveProductFromWishlist(wait);
         Thread.sleep(5000);  // 5 seconds wait
 
         loginPage.clickHidePromoIfExists();
@@ -75,14 +84,5 @@ public class WishlistTest extends BaseTest {
         Thread.sleep(5000);  // 5 seconds wait
     }
 
-    // A method to accept the cookies banner if it is present
-    private void acceptCookies() {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        try {
-            WebElement acceptCookiesButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("iqitcookielaw-accept")));
-            acceptCookiesButton.click();
-        } catch (Exception e) {
-            // Cookie banner did not appear, so continue with the test
-        }
-    }
+
 }
